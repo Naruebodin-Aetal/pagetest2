@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'bmipage.dart';
 import 'page2.dart';
 
 void main() {
@@ -15,17 +16,30 @@ class FirstRoute extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('First Route')),
-      body: Center(
-        child: ElevatedButton(
+      body: Column(
+        children:[ 
+          ElevatedButton(
           child: const Text('Open route'),
           onPressed: () {
             // Navigate to second route when tapped.
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const Page2()),
+              );
+            },
+          ),
+          ElevatedButton(
+          child: const Text('Open route'),
+          onPressed: () {
+            // Navigate to second route when tapped.
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const BMIPage()),
             );
-          },
-        ),
+          },)
+        
+
+        ]
       ),
     );
   }
