@@ -3,10 +3,35 @@ import 'bmipage.dart';
 import 'page2.dart';
 
 void main() {
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: FirstRoute(), // หรือ widget หลักของคุณ
-  ));
+  runApp(
+    MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: FirstRoute(), // หรือ widget หลักของคุณ
+    ),
+  );
+}
+
+class ButtonApp extends StatelessWidget {
+  const ButtonApp({super.key, required this.title, this.image = '',required this.page});
+
+  //รูปภาพพื้นหลังของปุ่ม !! ยังคิดไม่ออก
+  final String image;
+  //หัวข้อของปุ่ม
+  final String title;
+  //หน้าที่ต้องการไป
+  final Widget page;
+
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      child: Text(title),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => page),
+        );
+      },
+    );
+  }
 }
 
 class FirstRoute extends StatelessWidget {
@@ -15,31 +40,16 @@ class FirstRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('First Route')),
-      body: Column(
-        children:[ 
-          ElevatedButton(
-          child: const Text('Open route'),
-          onPressed: () {
-            // Navigate to second route when tapped.
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const Page2()),
-              );
-            },
-          ),
-          ElevatedButton(
-          child: const Text('Open route'),
-          onPressed: () {
-            // Navigate to second route when tapped.
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const BMIPage()),
-            );
-          },)
-        
-
-        ]
+      appBar: AppBar(title: const Text('รักสุขภาพ')),
+      body: Center(
+        child: Column(
+          spacing: 20,
+          children: [
+            ButtonApp(title: "คำนวณดัชนีมวลกาย", page: const BMIPage()),
+            ButtonApp(title: "ผักและการออกกำลังกาย", page: const Page2()),
+            
+          ],
+        ),
       ),
     );
   }
