@@ -75,14 +75,19 @@ class VegetablePage extends StatelessWidget {
   }
 }
 
-class ExercisePage extends StatelessWidget {
+class ExercisePage extends StatefulWidget {
+  @override
+  State<ExercisePage> createState() => _ExercisePageState();
+}
+
+class _ExercisePageState extends State<ExercisePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount( //การกำหนดรูปแบบการจัดวาง grid ใน GridView ของ Flutter โดยใช้จำนวนคอลัมน์ที่แน่นอน (fixed number of columns)
-            crossAxisCount: 2, //grid มี 2 คอลัมน์
-            childAspectRatio: 0.8, //กำหนดอัตราส่วนกว้าง/สูงของแต่ละช่อง
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 0.8,
           ),
           itemCount: info_exercise_List.length,
           itemBuilder: (context, index) {
@@ -90,16 +95,17 @@ class ExercisePage extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
                 child: InkWell(
                 onTap: () {
-                  showMessageDialog(
+                  showMessageDialog2(
                     context,
                     info_exercise_List[index].title,
                     info_exercise_List[index].message,
+                    info_exercise_List[index].videoPlayer,
                     info_exercise_List[index].image,
                   );
                 },
-                  child: Ink.image(
-                  image: info_vegetable_List[index].image,
-                  fit: BoxFit.cover,)
+                child: Ink.image(
+                image: info_exercise_List[index].image,
+                fit: BoxFit.cover,),
               ),
             );
           },
