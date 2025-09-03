@@ -53,22 +53,21 @@ class VegetablePage extends StatelessWidget {
           ),
           itemCount: info_vegetable_List.length,
           itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-                child: InkWell(
-                onTap: () {
-                  showMessageDialog(
-                    context,
-                    info_vegetable_List[index].title,
-                    info_vegetable_List[index].message,
-                    info_vegetable_List[index].image,
-                  );
-                },
-                  child: Ink.image(
-                  image: info_vegetable_List[index].image,
-                  fit: BoxFit.cover,)
-              ),
-            );
+            return InkWell(
+            onTap: () {
+              showMessageDialog(
+                context,
+                info_vegetable_List[index].title,
+                info_vegetable_List[index].message,
+                info_vegetable_List[index].image,
+              );
+            },
+              child: Card(
+                child: Ink.image(
+                image: info_vegetable_List[index].image,
+                fit: BoxFit.cover,),
+              )
+                          );
           },
         ),
     );
@@ -84,33 +83,51 @@ class _ExercisePageState extends State<ExercisePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 0.8,
-          ),
-          itemCount: info_exercise_List.length,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-                child: InkWell(
-                onTap: () {
-                  showMessageDialog2(
-                    context,
-                    info_exercise_List[index].title,
-                    info_exercise_List[index].message,
-                    info_exercise_List[index].videoPlayer,
-                    info_exercise_List[index].image,
-                  );
-                },
-                child: Ink.image(
-                image: info_exercise_List[index].image,
-                fit: BoxFit.cover,),
+      body: ListView.builder(
+        itemCount: info_exercise_List.length,
+        itemBuilder: (context, index) {
+          return Card(
+            margin: const EdgeInsets.all(8),
+            elevation: 4,
+            child: InkWell(
+              onTap: () {
+                showMessageDialog2(
+                  context,
+                  info_exercise_List[index].title,
+                  info_exercise_List[index].message,
+                  info_exercise_List[index].videoPlayer,
+                  info_exercise_List[index].image,
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  //crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ClipOval(
+                      child: Image(
+                        image: info_exercise_List[index].image,
+                        height: 80,
+                        width: 80,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          info_exercise_List[index].title,
+                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                    
+                  ],
+                ),
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
+      ),
     );
   }
 }
-
