@@ -24,10 +24,10 @@ class _BMIPageState extends State<BMIPage> {
           child: Form(
             key: _formKey,
             child: Column(
-              spacing: 10,
               children: [
+                SizedBox(height: 100,),
                 SizedBox(
-                  width: 200,
+                  width: 300,
                   child: TextFormField(
                     decoration: InputDecoration(labelText: "น้ำหนัก(กิโลกรัม)"),
                     validator: Validators.multiValidator([
@@ -46,11 +46,11 @@ class _BMIPageState extends State<BMIPage> {
                   ),
                 ),
                 SizedBox(
-                  width: 200,
+                  width: 300,
                   child: TextFormField(
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
-                      labelText: "ส่วนสูง(เซนติเมตร)",
+                      labelText: "ส่วนสูง(เมตร)",
                     ),
                     validator: Validators.multiValidator([
                       Validators.required(errorMessage: "กรุณากรอกข้อมูล"),
@@ -104,7 +104,7 @@ Widget showBlock(double weight, double height) {
       height: 500,
       child: Column(
         children: [
-          Text((weight + height).toString())
+          Text((weight / (height * height)).toStringAsFixed(2))
         ],
       ),
     ),
