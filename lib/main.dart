@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pagetest2/bminote.dart';
 import 'bmipage.dart';
 import 'page2.dart';
 
@@ -12,10 +13,8 @@ void main() {
 }
 
 class ButtonApp extends StatelessWidget {
-  const ButtonApp({super.key, required this.title, this.image = '',required this.page});
-
-  //รูปภาพพื้นหลังของปุ่ม !! ยังคิดไม่ออก
-  final String image;
+  const ButtonApp({super.key, required this.title,required this.page});
+  
   //หัวข้อของปุ่ม
   final String title;
   //หน้าที่ต้องการไป
@@ -47,7 +46,7 @@ class FirstRoute extends StatelessWidget {
           children: [
             ButtonApp(title: "คำนวณดัชนีมวลกาย", page: const BMIPage()),
             ButtonApp(title: "ผักและการออกกำลังกาย", page: const Page2()),
-            
+            ButtonApp(title: "บันทึก",page:const Bminote())
           ],
         ),
       ),
