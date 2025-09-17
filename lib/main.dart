@@ -1,9 +1,13 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:pagetest2/bminote.dart';
-import 'bmipage.dart';
+import 'package:pagetest2/bmipage/bminote.dart';
+import 'package:pagetest2/firebase/firebase_options.dart';
+import 'bmipage/bmipage.dart';
 import 'page2.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -13,8 +17,8 @@ void main() {
 }
 
 class ButtonApp extends StatelessWidget {
-  const ButtonApp({super.key, required this.title,required this.page});
-  
+  const ButtonApp({super.key, required this.title, required this.page});
+
   //หัวข้อของปุ่ม
   final String title;
   //หน้าที่ต้องการไป
@@ -24,10 +28,7 @@ class ButtonApp extends StatelessWidget {
     return ElevatedButton(
       child: Text(title),
       onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => page),
-        );
+        Navigator.push(context, MaterialPageRoute(builder: (context) => page));
       },
     );
   }
@@ -39,18 +40,18 @@ class FirstRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('รักสุขภาพ')),
+      appBar: AppBar(title: const Text('รักสุขภาพ'),centerTitle: true,),
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           spacing: 20,
           children: [
             ButtonApp(title: "คำนวณดัชนีมวลกาย", page: const BMIPage()),
             ButtonApp(title: "ผักและการออกกำลังกาย", page: const Page2()),
-            ButtonApp(title: "บันทึก",page:const Bminote())
+            ButtonApp(title: "บันทึกผล", page: const Bminote()),
           ],
         ),
       ),
     );
   }
 }
-
