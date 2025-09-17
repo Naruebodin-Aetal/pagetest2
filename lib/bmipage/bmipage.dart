@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'bmidata.dart';
-import 'validators.dart';
+import '../validators.dart';
 
 double? sum;
 double? bmi;

@@ -1,10 +1,14 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:pagetest2/bminote.dart';
-import 'bmipage.dart';
+import 'package:pagetest2/bmipage/bminote.dart';
+import 'package:pagetest2/firebase/firebase_options.dart';
+import 'bmipage/bmipage.dart';
 import 'page2.dart';
 import 'slidepic.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -14,8 +18,8 @@ void main() {
 }
 
 class ButtonApp extends StatelessWidget {
-  const ButtonApp({super.key, required this.title,required this.page});
-  
+  const ButtonApp({super.key, required this.title, required this.page});
+
   //หัวข้อของปุ่ม
   final String title;
   //หน้าที่ต้องการไป
@@ -25,10 +29,7 @@ class ButtonApp extends StatelessWidget {
     return ElevatedButton(
       child: Text(title),
       onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => page),
-        );
+        Navigator.push(context, MaterialPageRoute(builder: (context) => page));
       },
     );
   }
