@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pagetest2/bminote.dart';
 import 'bmipage.dart';
 import 'page2.dart';
+import 'slidepic.dart';
 
 void main() {
   runApp(
@@ -39,18 +40,149 @@ class FirstRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('รักสุขภาพ')),
-      body: Center(
+      backgroundColor: Colors.transparent,
+      appBar: AppBar(title: Center(child: const Text('มาสุขภาพดีด้วยกันเถอะ')),backgroundColor: Colors.limeAccent[400],),
+      body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/images/formain/background.jpg"), // Your image asset path
+              fit: BoxFit.cover,
+            ),
+          ),
         child: Column(
-          spacing: 20,
           children: [
-            ButtonApp(title: "คำนวณดัชนีมวลกาย", page: const BMIPage()),
-            ButtonApp(title: "ผักและการออกกำลังกาย", page: const Page2()),
-            ButtonApp(title: "บันทึก",page:const Bminote())
+            SlidePic(),
+            SizedBox(height: 20),
+            Center(
+              child: Column(
+                children: [
+                  SizedBox(
+                    width: 220,
+                    height: 48,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+                        overlayColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.pressed)) {
+                              return Colors.blue.withOpacity(0.5); // สีเมื่อกดปุ่ม
+                            }
+                            return null; // ใช้สีเริ่มต้น
+                          },
+                        ),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4), // ปรับเหลี่ยม (4 = เหลี่ยมมาก)
+                          ),
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const BMIPage()),
+                        );
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.search, size: 16, color: Colors.white),
+                          SizedBox(width: 8),
+                          const Text(
+                            "คำนวณดัชนีมวลกาย",
+                            style: TextStyle(fontSize: 16, color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  
+                  SizedBox(
+                    width: 220,
+                    height: 48,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.pink),
+                        overlayColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.pressed)) {
+                              return Colors.blue.withOpacity(0.5); // สีเมื่อกดปุ่ม
+                            }
+                            return null; // ใช้สีเริ่มต้น
+                          },
+                        ),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4), // ปรับเหลี่ยม (4 = เหลี่ยมมาก)
+                          ),
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const Page2()),
+                        );
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.run_circle_sharp, size: 14, color: Colors.white),
+                          SizedBox(width: 8),
+                          const Text(
+                            "ผักและการออกกำลังกาย",
+                            style: TextStyle(fontSize: 14, color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+        
+                  SizedBox(
+                    width: 220,
+                    height: 48,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.deepOrange),
+                        overlayColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.pressed)) {
+                              return Colors.blue.withOpacity(0.5); // สีเมื่อกดปุ่ม
+                            }
+                            return null; // ใช้สีเริ่มต้น
+                          },
+                        ),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4), // ปรับเหลี่ยม (4 = เหลี่ยมมาก)
+                          ),
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const Bminote()),
+                        );
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.analytics_outlined, size: 30, color: Colors.white),
+                          SizedBox(width: 8),
+                          const Text(
+                            "บันทึก",
+                            style: TextStyle(fontSize: 30, color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 }
-
