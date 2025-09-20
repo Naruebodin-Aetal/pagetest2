@@ -8,7 +8,7 @@ class SlidePic extends StatelessWidget {
   Widget build(BuildContext context) {
     return CarouselSlider(
       options: CarouselOptions(
-        height: 200.0,
+        height: 150.0,
         autoPlay: true,
         autoPlayInterval: Duration(seconds: 5),
         autoPlayAnimationDuration: Duration(milliseconds: 800),
@@ -19,9 +19,9 @@ class SlidePic extends StatelessWidget {
         initialPage: 0,
       ),
       items: [
-        'assets/images/slide1.jpg',
-        'assets/images/slide2.jpg',
-        'assets/images/slide3.jpg',
+        'assets/images/formain/physicalexercise.jpg',
+        'assets/images/formain/gigachad.png',
+        'assets/images/formain/roblox.png',
       ].map((i) {
         return Builder(
           builder: (BuildContext context) {

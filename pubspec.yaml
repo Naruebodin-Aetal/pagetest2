@@ -67,6 +67,7 @@ flutter:
     - assets/images/exercise_img/
     - assets/images/vegetable_img/
     - assets/images/formain/
+    - assets/images/fruit_img/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
