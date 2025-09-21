@@ -1,9 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'bmidata.dart';
+import 'package:pagetest2/bmipage/bmimodel.dart';
 import '../validators.dart';
-
-double? sum;
-double? bmi;
 
 class BMIPage extends StatefulWidget {
   const BMIPage({super.key});
@@ -12,160 +11,136 @@ class BMIPage extends StatefulWidget {
 }
 
 class _BMIPageState extends State<BMIPage> {
-  //ช่องแสดงครั้งแรกเมื่อกดปุ่มครั้งแรก
-  bool pressBtFirst = false;
-  //ตัวแปรส่วนสูงน้ำหนัก
-  double? height;
-  double? weight;
+  Bmimodel data = Bmimodel();
 
   final _formKey = GlobalKey<FormState>();
+  final Future<FirebaseApp> firebase = Firebase.initializeApp();
+  final CollectionReference collection = FirebaseFirestore.instance.collection(
+    "User1",
+  );
+
+  bool showResultBox = false;
 
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("คำนวณดัชนีมวลกาย")),
+      appBar: AppBar(title: Text("คำนวณค่าดัชนีมวลกาย")),
       body: SingleChildScrollView(
         child: Center(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                SizedBox(height: 100),
-                SizedBox(
-                  width: 300,
-                  child: TextFormField(
-                    decoration: InputDecoration(labelText: "น้ำหนัก(กิโลกรัม)"),
-                    validator: Validators.multiValidator([
-                      Validators.required(errorMessage: "กรุณากรอกข้อมูล"),
-                      Validators.numberValidator(
-                        errorMessage: "กรุณากรอกตัวเลข",
-                      ),
-                      Validators.minValue(
-                        errorMessage: "เลขไม่ถูกต้อง",
-                        minValue: 1,
-                      ),
-                    ]),
-                    onChanged: (value) {
-                      weight = double.tryParse(value);
-                    },
-                  ),
-                ),
-                SizedBox(
-                  width: 300,
-                  child: TextFormField(
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(labelText: "ส่วนสูง(เมตร)"),
-                    validator: Validators.multiValidator([
-                      Validators.required(errorMessage: "กรุณากรอกข้อมูล"),
-                      Validators.numberValidator(
-                        errorMessage: "กรุณากรอกตัวเลข",
-                      ),
-                      Validators.minValue(
-                        errorMessage: "เลขไม่ถูกต้อง",
-                        minValue: 1,
-                      ),
-                    ]),
-                    onChanged: (value) {
-                      height = double.tryParse(value);
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        if (!_formKey.currentState!.validate()) {
-                          pressBtFirst = false;
-                          return;
-                        }
-                        pressBtFirst = true;
-                        bmi = weight! / (height! * height!);
-                      });
-                    },
-                    child: Text("คำนวณ"),
-                  ),
-                ),
-                if (pressBtFirst)
-                  showBlock(bmi!),
-              ],
-            ),
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(spacing: 20, children: [description(), form(), showResultBox ? resultBox() : SizedBox()]),
           ),
         ),
       ),
     );
   }
-}
 
-String bmiStatus(double bmi) {
-  if (bmi < 18.5)
-    return "ผอม/น้ำหนักน้อย";
-  else if (bmi >= 18.5 && bmi <= 24.9)
-    return "ปกติ";
-  else if (bmi >= 25 && bmi <= 29.9)
-    return "น้ำหนักเกิน";
-  else
-    return "อ้วน";
-}
-
-Widget showBlock(double bmi) {
-  return Padding(
-    padding: const EdgeInsets.all(20),
-    child: Container(
-      decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(20),
+  Widget description() {
+    return Card(
+      child: Container(
+        padding: EdgeInsets.all(20),
+        width: 600,
+        child: Text(
+          """
+          การหาค่าดัชนีมวลกาย (Body Mass Index : BMI) 
+          คือเป็นมาตรการที่ใช้ประเมินภาวะอ้วนและผอมในผู้ใหญ่ ตั้งแต่อายุ 20 ปีขึ้นไป 
+          สามารถทำได้โดยการชั่งน้ำหนักตัวเป็นกิโลกรัม และวัดส่วนสูงเป็นเซนติเมตร 
+          แล้วนำมาหาดัชมีมวลกาย โดยใช้โปรแกรมวัดค่าความอ้วนข้างต้น
+          """
+        )
       ),
-      width: 500,
-      child: Padding(
-        padding: const EdgeInsets.all(50.0),
+    );
+  }
+
+  Widget form() {
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: [
+          SizedBox(
+            width: 300,
+            child: TextFormField(
+              decoration: InputDecoration(labelText: "น้ำหนัก(กิโลกรัม)"),
+              validator: Validators.multiValidator([
+                Validators.required(errorMessage: "กรุณากรอกข้อมูล"),
+                Validators.numberValidator(errorMessage: "กรุณากรอกตัวเลข"),
+                Validators.minValue(errorMessage: "เลขไม่ถูกต้อง", minValue: 1),
+              ]),
+              onChanged: (value) {
+                data.weight = double.tryParse(value);
+              },
+            ),
+          ),
+          SizedBox(
+            width: 300,
+            child: TextFormField(
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: "ส่วนสูง(เมตร)"),
+              validator: Validators.multiValidator([
+                Validators.required(errorMessage: "กรุณากรอกข้อมูล"),
+                Validators.numberValidator(errorMessage: "กรุณากรอกตัวเลข"),
+                Validators.minValue(errorMessage: "เลขไม่ถูกต้อง", minValue: 1),
+              ]),
+              onChanged: (value) {
+                data.height = double.tryParse(value);
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: ElevatedButton(
+              onPressed: () async {
+                if (_formKey.currentState!.validate()) {
+                  data.bmi = data.weight! / (data.height! * data.height!);
+                  await collection.add({
+                    'weight': data.weight,
+                    'height': data.height,
+                    'date': DateTime.now(),
+                    'bmi': data.bmi,
+                  });
+                  setState(() {
+                  showResultBox = true;
+                  });
+                }
+                
+              },
+              child: Text("คำนวณและบันทึก"),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget resultBox() {
+    return Card(color: Colors.white70,
+      child: Container(
+        padding: EdgeInsets.all(20),
+        width: 500,
+        height: 500,
         child: Column(
+          spacing: 10,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Card(
-              child: Text(
-                "BMI = ${bmi.toStringAsFixed(2)}",
-                textScaler: TextScaler.linear(1.5),
-              ),
+            Text(
+              'ค่า BMI ที่ได้คือ ${data.bmi!.toStringAsFixed(2)}',
+              textScaler: TextScaler.linear(1.5),
             ),
-            Card(
-              child: Text(
-                "อยู่ในเกณฑ์ : ${bmiStatus(bmi)}",
-                textScaler: TextScaler.linear(1.5),
-              ),
+            Text("อยู่ในเกณฑ์ ${wordDeescriptToBmi(data.bmi!)}"),
+            Container(
+              decoration:BoxDecoration(borderRadius: BorderRadius.circular(20),color: Colors.black),
+              height: 3,
+              width:double.maxFinite
             ),
-            CardTopic(
-              title: getData(bmi).advicefood,
-              topic: "คำแนะนำอาหาร",
-            ),
-            CardTopic(
-              title: getData(bmi).adviceworkout,
-              topic: "คำแนะนำออกกำลังกาย",
-            ),
+            Text("คำแนะนำด้านอาหารการกิน",style: TextStyle(fontWeight: FontWeight.bold),textScaler: TextScaler.linear(1.3),),
+            Text(data.getadviceFood()),
+            Text("คำแนะนำด้านการออกกำลังกาย",style: TextStyle(fontWeight: FontWeight.bold),textScaler: TextScaler.linear(1.3),),
+            Text(data.getadviceWorkout())
           ],
         ),
       ),
-    ),
-  );
-}
-
-class CardTopic extends StatelessWidget {
-  final String title;
-  final String topic;
-
-  const CardTopic({super.key, required this.title, required this.topic});
-
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [Text(topic), Text(title)],
-          ),
-        ),
-      ),
     );
   }
 }
+
+

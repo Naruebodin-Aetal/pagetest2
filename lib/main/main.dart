@@ -11,6 +11,7 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
     MaterialApp(
+      theme: ThemeData(appBarTheme: AppBarTheme(backgroundColor: Colors.limeAccent[400])),
       debugShowCheckedModeBanner: false,
       home: FirstRoute(),
     ),

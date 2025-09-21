@@ -1,13 +1,20 @@
-class BmiData {
-  const BmiData({required this.advicefood, required this.adviceworkout});
+class Bmimodel {
+  String? date;
+  double? height;
+  double? weight;
+  double? bmi;
 
-  final String advicefood;
-  final String adviceworkout;
-}
+  String getadviceFood() {
+    return bmiDataType[bmiChecker(bmi!)]!.advicefood;
+  }
+  String getadviceWorkout() {
+    return bmiDataType[bmiChecker(bmi!)]!.adviceworkout;
+  }
 
-BmiData getData(double bmi) {
-  List<BmiData> data = [
-    BmiData(
+  
+
+  Map<int, BmiData> bmiDataType = {
+    1: BmiData(
       advicefood: """
       -กินอาหารครบ 3 มื้อรวมกับของว่าง
       -เพิ่มโปรตีน(เนื้อสัตว์ไม่ติดมัน, ไข่, นม, ถั่ว)
@@ -19,7 +26,7 @@ BmiData getData(double bmi) {
       -คาร์ดิโอเบาๆ เช่นเดิน, ปั่นจักรยาน 2-3 วันต่อสัปดาห์
       """,
     ),
-    BmiData(
+    2: BmiData(
       advicefood: """
       -รักษาสมดุลอาหาร 5 หมู่ 
       -กินผักและผลไม้เป็นประจำ
@@ -29,8 +36,9 @@ BmiData getData(double bmi) {
       -ออกกำลังกาย 3-5 วันต่อสัปดาห์
       -ผลผสมคาร์ดิโอ(วิ่ง, ว่ายน้ำ, เดินเร็ว) + เวทเทรนนิ่ง
       -เสริมโยคะ/ยืดเหยียดเพื่อสุขภาพ
-      """),
-    BmiData(
+      """,
+    ),
+    3: BmiData(
       advicefood: """
       -ลดอาหารที่มันจัด เค็มจัด หวานจัด
       -เพิ่มผัก ผลไม้ และโปรตีนไขมันต่ำ (ปลา, ไก่, เต้าหู้)
@@ -39,8 +47,9 @@ BmiData getData(double bmi) {
       adviceworkout: """
       -คาร์ดิโอปานกลาง–หนัก 4 วันต่อสัปดาห์ (วิ่ง, ปั่นจักรยาน, HIIT) 
       -เวทเทรนนิ่งเบา–ปานกลาง 2-3 วันต่อสัปดาห์
-      """),
-    BmiData(
+      """,
+    ),
+    4: BmiData(
       advicefood: """
       -ควบคุมอาหารอย่างเคร่งครัด 
       -ลดอาหารที่มันจัด เค็มจัด ของหวาน
@@ -51,18 +60,36 @@ BmiData getData(double bmi) {
       -เริ่มจากคาร์ดิโอเบาๆ (เดิน, ช้าๆ, ว่ายน้ำ, ปั่นจักรยาน) เพื่อให้ร่างกายคุ้นชิน 
       -เพิ่มความหนักเมื่อร่างกายแข็งแรงขึ้น - เวทเทรนนิ่งเพื่อเสริมกล้ามเนื้อ 
       -เน้นความสม่ำเสมอ ไม่หักโหม 
-      """),
-  ];
-  int index;
-
-  if (bmi < 18.5)
-    index = 0;
-  else if (bmi >= 18.5 && bmi <= 24.9)
-    index = 1;
-  else if (bmi >= 25 && bmi <= 29.9)
-    index = 2;
-  else
-    index = 3;
-
-  return data[index];
+      """,
+    ),
+  };
 }
+
+
+class BmiData {
+  const BmiData({required this.advicefood, required this.adviceworkout});
+
+  final String advicefood;
+  final String adviceworkout;
+}
+
+String wordDeescriptToBmi(double bmi){
+    switch(bmiChecker(bmi)){
+      case 1: return "ผอม/น้ำหนักน้อย";
+      case 2: return "ปกติ";
+      case 3: return "น้ำหนักเกิน";
+      default: return "อ้วน/โรคอ้วน";
+    }
+  }
+
+  int bmiChecker(double bmi) {
+    if (bmi < 18.5) {
+      return 1;
+    } else if (bmi >= 18.5 && bmi <= 24.9) {
+      return 2;
+    } else if (bmi >= 25 && bmi <= 29.9) {
+      return 3;
+    }else{
+      return 4;
+    }
+  }
