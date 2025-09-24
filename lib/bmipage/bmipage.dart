@@ -25,7 +25,23 @@ class _BMIPageState extends State<BMIPage> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("คำนวณค่าดัชนีมวลกาย")),
+      appBar: AppBar(
+  elevation: 0,
+  flexibleSpace: Container(
+    decoration: const BoxDecoration(
+      gradient: LinearGradient(
+        colors: [Colors.teal, Colors.greenAccent],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      ),
+    ),
+  ),
+  title: const Text(
+    'คำนวณค่าดัชนีมวลกาย (BMI)',
+    style: TextStyle(fontWeight: FontWeight.bold),
+  ),
+  centerTitle: true,
+),
       body: SingleChildScrollView(
         child: Center(
           child: Padding(

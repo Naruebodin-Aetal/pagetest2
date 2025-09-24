@@ -8,8 +8,22 @@ class Page2 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Healthy & Exercise'),
+  elevation: 0,
+  flexibleSpace: Container(
+    decoration: const BoxDecoration(
+      gradient: LinearGradient(
+        colors: [Colors.teal, Colors.greenAccent],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
       ),
+    ),
+  ),
+  title: const Text(
+    'Healthy & Exercise',
+    style: TextStyle(fontWeight: FontWeight.bold),
+  ),
+  centerTitle: true,
+),
       body: MyTabPage(),
     );
   }

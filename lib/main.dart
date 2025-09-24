@@ -14,9 +14,15 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
     MaterialApp(
-      theme: ThemeData(appBarTheme: AppBarTheme(backgroundColor: Colors.limeAccent[400])),
+      theme: ThemeData(
+        fontFamily: 'Roboto',
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
+        appBarTheme: const AppBarTheme(
+          foregroundColor: Colors.white,
+        ),
+      ),
       debugShowCheckedModeBanner: false,
-      home: LoginScreen(),
+      home: const LoginScreen(),
     ),
   );
 }
@@ -28,7 +34,7 @@ class FirstRoute extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        // ภาพพื้นหลังเบลอ
+        // Background Blur
         ImageFiltered(
           imageFilter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
           child: Container(
@@ -40,93 +46,134 @@ class FirstRoute extends StatelessWidget {
             ),
           ),
         ),
+
+        // Main Scaffold
         Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
-            elevation: 4,
+            elevation: 0,
+            flexibleSpace: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.teal, Colors.greenAccent],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
+            ),
             title: const Text(
               'Healthy Care',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             centerTitle: true,
-            actions: [IconButton(
-            icon: Icon(Icons.logout, color: Colors.white),
-            onPressed: () {
-                AuthenticationService().logout();
-                Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => const LoginScreen()),
-                  (Route<dynamic> route) => false,
-                );
-                
-            },
-          ),],
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.logout, color: Colors.white),
+                onPressed: () {
+                  AuthenticationService().logout();
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => const LoginScreen()),
+                    (Route<dynamic> route) => false,
+                  );
+                },
+              ),
+            ],
           ),
+
           body: SingleChildScrollView(
             child: Column(
               children: [
                 const SizedBox(height: 10),
                 SlidePic(),
                 const SizedBox(height: 20),
+
+                // Dashboard Section (แถวเดียวเรียงลงมา)
                 Container(
-                  padding: const EdgeInsets.all(16.0),
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.all(12.0),
                   decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.8),
-                  borderRadius: BorderRadius.circular(12.0),
-                ),
+                    color: Colors.white.withOpacity(0.85),
+                    borderRadius: BorderRadius.circular(18.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 10,
+                        offset: const Offset(0, 5),
+                      ),
+                    ],
+                  ),
                   child: Column(
                     children: [
-                      _buildMenuButton(
+                      _buildDashboardCard(
                         context,
-                        title: "คำนวณดัชนีมวลกาย",
+                        title: "คำนวณ BMI",
+                        icon: Icons.edit_location_alt_rounded,
                         color: Colors.green,
-                        icon: Icons.monitor_weight_outlined,
                         page: const BMIPage(),
                       ),
                       const SizedBox(height: 16),
-                      _buildMenuButton(
+                      _buildDashboardCard(
                         context,
                         title: "Healthy & Exercise",
-                        color: Colors.pink,
                         icon: Icons.fitness_center,
+                        color: Colors.pink,
                         page: const Page2(),
                       ),
                       const SizedBox(height: 16),
-                      _buildMenuButton(
+                      _buildDashboardCard(
                         context,
                         title: "บันทึก",
-                        color: Colors.deepOrange,
                         icon: Icons.analytics_outlined,
+                        color: Colors.deepOrange,
                         page: const Bminote(),
-                        fontSize: 20,
                       ),
-                      //const SizedBox(height: 20),
                     ],
                   ),
                 ),
+
+                const SizedBox(height: 20),
+
+                // Welcome Card
                 Card(
                   shadowColor: Colors.black54,
-                  elevation: 6,
+                  elevation: 8,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(18),
                   ),
                   margin: const EdgeInsets.symmetric(horizontal: 20),
                   child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Text(
-                      'ยินดีต้อนรับสู่แอปพลิเคชันสุขภาพของเรา! '
-                      'คุณสามารถคำนวณ BMI, ศึกษาข้อมูลการดูแลสุขภาพ '
-                      'และบันทึกข้อมูลสุขภาพของคุณได้อย่างสะดวก '
-                      'มาร่วมเดินทางสู่สุขภาพที่ดีไปด้วยกันเถอะ! 💪🍎',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.black87,
-                        height: 1.5,
-                      ),
-                      textAlign: TextAlign.center,
+                    padding: const EdgeInsets.all(22.0),
+                    child: Column(
+                      children: const [
+                        Icon(Icons.favorite, size: 48, color: Colors.redAccent),
+                        SizedBox(height: 12),
+                        Text(
+                          'ยินดีต้อนรับสู่แอปพลิเคชันสุขภาพของเรา!',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.teal,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: 12),
+                        Text(
+                          'คุณสามารถคำนวณ BMI, ศึกษาข้อมูลการดูแลสุขภาพ '
+                          'และบันทึกข้อมูลสุขภาพของคุณได้อย่างสะดวก '
+                          'มาร่วมเดินทางสู่สุขภาพที่ดีไปด้วยกันเถอะ! 💪🍎',
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.black87,
+                            height: 1.6,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
+
+                const SizedBox(height: 30),
               ],
             ),
           ),
@@ -135,41 +182,45 @@ class FirstRoute extends StatelessWidget {
     );
   }
 
-  // menu button widget
-  Widget _buildMenuButton(
+  // Dashboard Card (แบบเต็มแถว)
+  Widget _buildDashboardCard(
     BuildContext context, {
     required String title,
-    required Color color,
     required IconData icon,
+    required Color color,
     required Widget page,
-    double fontSize = 16,
   }) {
-    return SizedBox(
-      width: 240,
-      height: 55,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: color,
-          foregroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
+    return InkWell(
+      borderRadius: BorderRadius.circular(16),
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => page),
+      ),
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        elevation: 6,
+        color: color.withOpacity(0.9),
+        child: Container(
+          height: 90,
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Row(
+            children: [
+              Icon(icon, size: 40, color: Colors.white),
+              const SizedBox(width: 20),
+              Expanded(
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              const Icon(Icons.arrow_forward_ios,
+                  color: Colors.white70, size: 20),
+            ],
           ),
-          elevation: 4,
-          shadowColor: Colors.black45,
-        ),
-        onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => page));
-        },
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 22, color: Colors.white),
-            const SizedBox(width: 10),
-            Text(
-              title,
-              style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
-            ),
-          ],
         ),
       ),
     );

@@ -31,9 +31,22 @@ class LoginScreen extends StatelessWidget {
         Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
-            title: const Text('เข้าสู่ระบบ'),
-            backgroundColor: Colors.blueAccent,
-          ),
+  elevation: 0,
+  flexibleSpace: Container(
+    decoration: const BoxDecoration(
+      gradient: LinearGradient(
+        colors: [Colors.teal, Colors.greenAccent],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      ),
+    ),
+  ),
+  title: const Text(
+    'เข้าสู่ระบบ',
+    style: TextStyle(fontWeight: FontWeight.bold),
+  ),
+  centerTitle: true,
+),
           body: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(24.0),

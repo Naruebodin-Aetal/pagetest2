@@ -9,7 +9,23 @@ class Bminote extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("บันทึก BMI  ทั้งหมด")),
+      appBar: AppBar(
+  elevation: 0,
+  flexibleSpace: Container(
+    decoration: const BoxDecoration(
+      gradient: LinearGradient(
+        colors: [Colors.teal, Colors.greenAccent],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      ),
+    ),
+  ),
+  title: const Text(
+    'ประวัติการบันทึก BMI',
+    style: TextStyle(fontWeight: FontWeight.bold),
+  ),
+  centerTitle: true,
+),
       body: ListBmiData(),
     );
   }
