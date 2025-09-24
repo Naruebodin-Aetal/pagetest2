@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pagetest2/bmipage/bmimodel.dart';
 import '../validators.dart';
 
-String name = "Max";
+late String userid;
 
 class BMIPage extends StatefulWidget {
   const BMIPage({super.key});
@@ -98,9 +98,11 @@ class _BMIPageState extends State<BMIPage> {
             child: ElevatedButton(
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
-                  data.bmi =
-                      double.parse((data.weight! /
-                      ((data.height! / 100) * (data.height! / 100))).toStringAsFixed(2));
+                  data.bmi = double.parse(
+                    (data.weight! /
+                            ((data.height! / 100) * (data.height! / 100)))
+                        .toStringAsFixed(2),
+                  );
                   // await collection.add({
                   //   'name': name,
                   //   'data': {
@@ -110,7 +112,7 @@ class _BMIPageState extends State<BMIPage> {
                   //     'bmi': data.bmi,
                   //   },
                   // });
-                  await collection.doc(name).collection('records').add({
+                  await collection.doc(userid).collection('records').add({
                     'weight': data.weight,
                     'height': data.height,
                     'date': DateTime.now(),

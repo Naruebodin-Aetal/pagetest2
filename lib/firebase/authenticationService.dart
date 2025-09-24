@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:pagetest2/bmipage/bmipage.dart';
 
 class AuthenticationService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -9,6 +10,7 @@ class AuthenticationService {
         email: username,
         password: password,
       );
+      userid = _auth.currentUser!.uid;
       return userCredential.user != null;
     } catch (e) {
       return false;
@@ -29,7 +31,7 @@ class AuthenticationService {
 
   Future<void> logout() async {
     // Implement logout logic here
-    // clear user session 
+    // clear user session
     await _auth.signOut();
     // Clear any stored data on Local Storage or Shared Preferences if needed
   }

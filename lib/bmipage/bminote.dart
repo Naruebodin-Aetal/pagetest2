@@ -23,14 +23,17 @@ class ListBmiData extends StatelessWidget {
       stream:
           FirebaseFirestore.instance
               .collection("user")
-              .doc(name)
+              .doc(userid)
               .collection('records')
-              .orderBy('date',descending: true)
+              .orderBy('date', descending: true)
               .snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (!snapshot.hasData) {
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         }
+        if (snapshot.data!.docs.isEmpty) {
+            return Center(child: Text('ไม่มีข้อมูลที่บันทึกไว้'));
+          }
         return ListView(
           children:
               snapshot.data!.docs.map((document) {
@@ -67,7 +70,9 @@ class ListBmiData extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('BMI = ${(data['bmi']).toString()}'),
-                        Text('ส่วนสูง = ${data['height'].toString()} เซนติเมตร'),
+                        Text(
+                          'ส่วนสูง = ${data['height'].toString()} เซนติเมตร',
+                        ),
                         Text('น้ำหนัก = ${data['weight'].toString()} กิโลกรัม'),
                       ],
                     ),
