@@ -9,7 +9,6 @@ class Page2 extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Healthy & Exercise'),
-        backgroundColor: Colors.limeAccent[400]
       ),
       body: MyTabPage(),
     );

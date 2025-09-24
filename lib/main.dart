@@ -2,8 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:pagetest2/bmipage/bminote.dart';
 import 'package:pagetest2/firebase/firebase_options.dart';
-import '../bmipage/bmipage.dart';
-import '../information_page/page2.dart';
+import 'bmipage/bmipage.dart';
+import 'information_page/page2.dart';
 import 'slidepic.dart';
 
 void main() async {
@@ -32,7 +32,6 @@ class FirstRoute extends StatelessWidget {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        backgroundColor: Colors.limeAccent[400],
       ),
       body: SingleChildScrollView(
         child: Column(
