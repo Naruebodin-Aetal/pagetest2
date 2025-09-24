@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:pagetest2/bmipage/bmimodel.dart';
 import '../validators.dart';
 
+late String userid;
+
 class BMIPage extends StatefulWidget {
   const BMIPage({super.key});
 
@@ -16,7 +18,7 @@ class _BMIPageState extends State<BMIPage> {
   final _formKey = GlobalKey<FormState>();
   final Future<FirebaseApp> firebase = Firebase.initializeApp();
   final CollectionReference collection = FirebaseFirestore.instance.collection(
-    "User1",
+    "user",
   );
 
   bool showResultBox = false;
@@ -28,7 +30,14 @@ class _BMIPageState extends State<BMIPage> {
         child: Center(
           child: Padding(
             padding: const EdgeInsets.all(20.0),
-            child: Column(spacing: 20, children: [description(), form(), showResultBox ? resultBox() : SizedBox()]),
+            child: Column(
+              spacing: 20,
+              children: [
+                description(),
+                form(),
+                showResultBox ? resultBox() : SizedBox(),
+              ],
+            ),
           ),
         ),
       ),
@@ -40,14 +49,12 @@ class _BMIPageState extends State<BMIPage> {
       child: Container(
         padding: EdgeInsets.all(20),
         width: 600,
-        child: Text(
-          """
+        child: Text("""
           การหาค่าดัชนีมวลกาย (Body Mass Index : BMI) 
           คือเป็นมาตรการที่ใช้ประเมินภาวะอ้วนและผอมในผู้ใหญ่ ตั้งแต่อายุ 20 ปีขึ้นไป 
           สามารถทำได้โดยการชั่งน้ำหนักตัวเป็นกิโลกรัม และวัดส่วนสูงเป็นเซนติเมตร 
           แล้วนำมาหาดัชมีมวลกาย โดยใช้โปรแกรมวัดค่าความอ้วนข้างต้น
-          """
-        )
+          """),
       ),
     );
   }
@@ -75,7 +82,7 @@ class _BMIPageState extends State<BMIPage> {
             width: 300,
             child: TextFormField(
               keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: "ส่วนสูง(เมตร)"),
+              decoration: InputDecoration(labelText: "ส่วนสูง(เซนติเมตร)"),
               validator: Validators.multiValidator([
                 Validators.required(errorMessage: "กรุณากรอกข้อมูล"),
                 Validators.numberValidator(errorMessage: "กรุณากรอกตัวเลข"),
@@ -91,18 +98,30 @@ class _BMIPageState extends State<BMIPage> {
             child: ElevatedButton(
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
-                  data.bmi = data.weight! / (data.height! * data.height!);
-                  await collection.add({
+                  data.bmi = double.parse(
+                    (data.weight! /
+                            ((data.height! / 100) * (data.height! / 100)))
+                        .toStringAsFixed(2),
+                  );
+                  // await collection.add({
+                  //   'name': name,
+                  //   'data': {
+                  //     'weight': data.weight,
+                  //     'height': data.height,
+                  //     'date': DateTime.now(),
+                  //     'bmi': data.bmi,
+                  //   },
+                  // });
+                  await collection.doc(userid).collection('records').add({
                     'weight': data.weight,
                     'height': data.height,
                     'date': DateTime.now(),
                     'bmi': data.bmi,
                   });
                   setState(() {
-                  showResultBox = true;
+                    showResultBox = true;
                   });
                 }
-                
               },
               child: Text("คำนวณและบันทึก"),
             ),
@@ -113,7 +132,8 @@ class _BMIPageState extends State<BMIPage> {
   }
 
   Widget resultBox() {
-    return Card(color: Colors.white70,
+    return Card(
+      color: Colors.white70,
       child: Container(
         padding: EdgeInsets.all(20),
         width: 500,
@@ -123,24 +143,33 @@ class _BMIPageState extends State<BMIPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'ค่า BMI ที่ได้คือ ${data.bmi!.toStringAsFixed(2)}',
+              'ค่า BMI ที่ได้คือ ${data.bmi!.toString()}',
               textScaler: TextScaler.linear(1.5),
             ),
             Text("อยู่ในเกณฑ์ ${wordDeescriptToBmi(data.bmi!)}"),
             Container(
-              decoration:BoxDecoration(borderRadius: BorderRadius.circular(20),color: Colors.black),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Colors.black,
+              ),
               height: 3,
-              width:double.maxFinite
+              width: double.maxFinite,
             ),
-            Text("คำแนะนำด้านอาหารการกิน",style: TextStyle(fontWeight: FontWeight.bold),textScaler: TextScaler.linear(1.3),),
+            Text(
+              "คำแนะนำด้านอาหารการกิน",
+              style: TextStyle(fontWeight: FontWeight.bold),
+              textScaler: TextScaler.linear(1.3),
+            ),
             Text(data.getadviceFood()),
-            Text("คำแนะนำด้านการออกกำลังกาย",style: TextStyle(fontWeight: FontWeight.bold),textScaler: TextScaler.linear(1.3),),
-            Text(data.getadviceWorkout())
+            Text(
+              "คำแนะนำด้านการออกกำลังกาย",
+              style: TextStyle(fontWeight: FontWeight.bold),
+              textScaler: TextScaler.linear(1.3),
+            ),
+            Text(data.getadviceWorkout()),
           ],
         ),
       ),
     );
   }
 }
-
-
