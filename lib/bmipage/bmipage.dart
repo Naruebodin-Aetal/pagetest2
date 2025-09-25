@@ -139,7 +139,10 @@ class _BMIPageState extends State<BMIPage> {
                   });
                 }
               },
-              child: Text("คำนวณและบันทึก"),
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Text("คำนวณและบันทึก"),
+              ),
             ),
           ),
         ],
