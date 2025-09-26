@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:pagetest2/bmipage/bmimodel.dart';
 import '../validators.dart';
 
-late String userid;
+late String userid = FirebaseAuth.instance.currentUser!.uid;
 
 class BMIPage extends StatefulWidget {
   const BMIPage({super.key});
@@ -179,9 +180,9 @@ class _BMIPageState extends State<BMIPage> {
 
   Widget resultBox() {
     return Card(
-      color: Colors.white70,
+      color: Colors.white.withOpacity(0.9),
       child: Container(
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.all(40),
         width: 500,
         height: 500,
         child: Column(

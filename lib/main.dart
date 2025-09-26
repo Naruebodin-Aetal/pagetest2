@@ -19,20 +19,20 @@ void main() async {
       theme: ThemeData(
         fontFamily: 'Roboto',
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
-        appBarTheme: const AppBarTheme(
-          foregroundColor: Colors.white,
-        ),
+        appBarTheme: const AppBarTheme(foregroundColor: Colors.white),
       ),
       debugShowCheckedModeBanner: false,
-      home: StreamBuilder(stream: FirebaseAuth.instance.authStateChanges(), 
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return const FirstRoute();
-        } else {
-          return const LoginScreen();
-        }
-      }),
-    )
+      home: StreamBuilder(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return const FirstRoute();
+          } else {
+            return const LoginScreen();
+          }
+        },
+      ),
+    ),
   );
 }
 
@@ -58,20 +58,47 @@ class FirstRoute extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              showDialog(context: context, builder: (BuildContext context) {
-                return AlertDialog(
-                  title: const Text('Developer Info'),
-                  content: const Text('ทวีศักดิ์ นาคทับ 6621600852\nนฤบดินทร์ แอตาล 6621600941\nศรัณย์ จันทร์ดารัตน์ 6621601239'),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text('Close'),
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: Text("Profile"),
+                    content: Text("Email : ${FirebaseAuth.instance.currentUser!.email!}"),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('Close'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            icon: const Icon(Icons.portrait_rounded, color: Colors.white),
+          ),
+          IconButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('Developer Info'),
+                    content: const Text(
+                      'ทวีศักดิ์ นาคทับ 6621600852\nนฤบดินทร์ แอตาล 6621600941\nศรัณย์ จันทร์ดารัตน์ 6621601239',
                     ),
-                  ],
-                );
-              });
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('Close'),
+                      ),
+                    ],
+                  );
+                },
+              );
             },
             icon: const Icon(Icons.cruelty_free, color: Colors.white),
           ),
@@ -190,7 +217,7 @@ class FirstRoute extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  Text( 
+                  Text(
                     'กราฟแสดงค่า BMI ของคุณ',
                     style: TextStyle(
                       fontSize: 18,
@@ -200,9 +227,7 @@ class FirstRoute extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: Card(
-                      child: BmiChartPage(),
-                    ),
+                    child: Card(child: BmiChartPage()),
                   ),
                   const SizedBox(height: 20),
                 ],
@@ -223,10 +248,11 @@ class FirstRoute extends StatelessWidget {
   }) {
     return InkWell(
       borderRadius: BorderRadius.circular(16),
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => page),
-      ),
+      onTap:
+          () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => page),
+          ),
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         elevation: 6,
@@ -248,8 +274,11 @@ class FirstRoute extends StatelessWidget {
                   ),
                 ),
               ),
-              const Icon(Icons.arrow_forward_ios,
-                  color: Colors.white70, size: 20),
+              const Icon(
+                Icons.arrow_forward_ios,
+                color: Colors.white70,
+                size: 20,
+              ),
             ],
           ),
         ),
