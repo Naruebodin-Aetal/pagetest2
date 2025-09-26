@@ -1,37 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-class MyNetworkVideoPlayer extends StatefulWidget {
-  final String videoUrl; // ต้องเป็นลิงก์ไฟล์วิดีโอจริงๆ (.mp4, .m3u8) ไม่ใช่ YouTube
-  const MyNetworkVideoPlayer({required this.videoUrl, super.key});
+class MyVideoPlayer extends StatefulWidget {
+  final String videoPath;
+  const MyVideoPlayer({required this.videoPath, super.key});
 
   @override
-  State<MyNetworkVideoPlayer> createState() => _MyNetworkVideoPlayerState();
+  State<MyVideoPlayer> createState() => _MyVideoPlayerState();
 }
 
-class _MyNetworkVideoPlayerState extends State<MyNetworkVideoPlayer> {
+class _MyVideoPlayerState extends State<MyVideoPlayer> {
   late VideoPlayerController _controller;
   bool _initFailed = false;
 
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl))
-      ..setLooping(true);
+    if (widget.videoPath.startsWith('assets/')) {
+      _controller = VideoPlayerController.asset(widget.videoPath)
+        ..setLooping(true);
+    } else {
+      _controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoPath))
+        ..setLooping(true);
+    }
     _initialize();
   }
 
-Future<void> _initialize() async {
-  try {
-    await _controller.initialize();
-    await _controller.play();
-    setState(() {});
-  } catch (e) {
-    debugPrint('Video init error: $e');
-    setState(() => _initFailed = true);
+  Future<void> _initialize() async {
+    try {
+      await _controller.initialize();
+      await _controller.play();
+      setState(() {});
+    } catch (e) {
+      debugPrint('Video init error: $e');
+      setState(() => _initFailed = true);
+    }
   }
-}
-
 
   @override
   void dispose() {

@@ -9,6 +9,7 @@ import '../information_page/page2.dart';
 import 'slidepic.dart';
 import '../firebase/authenticationService.dart';
 import 'bmi_bar_chart.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,8 +24,15 @@ void main() async {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      home: const LoginScreen(),
-    ),
+      home: StreamBuilder(stream: FirebaseAuth.instance.authStateChanges(), 
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return const FirstRoute();
+        } else {
+          return const LoginScreen();
+        }
+      }),
+    )
   );
 }
 
@@ -69,7 +77,7 @@ class FirstRoute extends StatelessWidget {
                         const Expanded(
                           child: Center(
                             child: Text(
-                              'Healthy Care',
+                              '           Healthy Care',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 22,
