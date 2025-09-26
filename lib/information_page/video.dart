@@ -14,9 +14,10 @@ class _MyVideoPlayerState extends State<MyVideoPlayer> {
   bool _initFailed = false;
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
-    if (widget.videoPath.startsWith('assets/')) {
+    var videoPath = widget.videoPath.startsWith('assets/video/');
+    if (videoPath) {
       _controller = VideoPlayerController.asset(widget.videoPath)
         ..setLooping(true);
     } else {

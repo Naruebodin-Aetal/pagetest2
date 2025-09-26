@@ -42,6 +42,51 @@ class FirstRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.teal, Colors.greenAccent],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+        title: const Text('Healthy Care'),
+        centerTitle: true,
+        //backgroundColor: Colors.teal,
+        actions: [
+          IconButton(
+            onPressed: () {
+              showDialog(context: context, builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text('Developer Info'),
+                  content: const Text('ทวีศักดิ์ นาคทับ 6621600852\nนฤบดินทร์ แอตาล 6621600941\nศรัณย์ จันทร์ดารัตน์ 6621601239'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Close'),
+                    ),
+                  ],
+                );
+              });
+            },
+            icon: const Icon(Icons.cruelty_free, color: Colors.white),
+          ),
+          IconButton(
+            icon: const Icon(Icons.logout, color: Colors.white),
+            onPressed: () {
+              AuthenticationService().logout();
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
+                (Route<dynamic> route) => false,
+              );
+            },
+          ),
+        ],
+      ),
       // Background Blur ด้วย Stack
       body: Stack(
         children: [
@@ -62,62 +107,6 @@ class FirstRoute extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  // AppBar แบบ custom
-                  Container(
-                    height: 64,
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [Colors.teal, Colors.greenAccent],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-                        const Expanded(
-                          child: Center(
-                            child: Text(
-                              '           Healthy Care',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 22,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            showDialog(context: context, builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: const Text('Developer Info'),
-                                content: const Text('ทวีศักดิ์ นาคทับ 6621600852\nนฤบดินทร์ แอตาล 6621600941\nศรัณย์ จันทร์ดารัตน์ 6621601239'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: const Text('Close'),
-                                  ),
-                                ],
-                              );
-                            });
-                          },
-                          icon: const Icon(Icons.cruelty_free, color: Colors.white),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.logout, color: Colors.white),
-                          onPressed: () {
-                            AuthenticationService().logout();
-                            Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(builder: (context) => const LoginScreen()),
-                              (Route<dynamic> route) => false,
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
                   const SizedBox(height: 10),
                   SlidePic(),
                   const SizedBox(height: 20),
