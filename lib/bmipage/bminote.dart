@@ -35,6 +35,20 @@ class ListBmiData extends StatelessWidget {
   const ListBmiData({super.key});
 
   Widget build(BuildContext context) {
+
+
+    Color colorPickType(double bmi){
+      if (bmi < 18.5) {
+      return Colors.blue;
+    } else if (bmi >= 18.5 && bmi <= 24.9) {
+      return Colors.green;
+    } else if (bmi >= 25 && bmi <= 29.9) {
+      return const Color.fromRGBO(251, 192, 45, 1);
+    }else{
+      return Colors.red;
+    }
+    }
+
     return StreamBuilder(
       stream:
           FirebaseFirestore.instance
@@ -79,11 +93,21 @@ class ListBmiData extends StatelessWidget {
                   ),
                   child: Card(
                     child: ListTile(
-                      leading: SizedBox(
+                      leading: Container(
+                        padding: EdgeInsets.all(5),
+                        alignment: Alignment.center,
+                        height: double.maxFinite,
                         width: 80,
+                        decoration: BoxDecoration(
+                          color: colorPickType(data['bmi'])
+                          ,
+                          borderRadius: BorderRadius.circular(20)),
                         child: Text(
                           wordDeescriptToBmi(data['bmi']),
                           textAlign: TextAlign.center,
+                          overflow: TextOverflow.ellipsis,
+                          textScaler: TextScaler.linear(1.3),
+                          style: TextStyle(color:Colors.white),
                         ),
                       ),
                       title: Text(
@@ -177,3 +201,4 @@ class ListBmiData extends StatelessWidget {
     );
   }
 }
+

@@ -24,45 +24,57 @@ class _BMIPageState extends State<BMIPage> {
   bool showResultBox = false;
 
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-  elevation: 0,
-  flexibleSpace: Container(
-    decoration: const BoxDecoration(
-      gradient: LinearGradient(
-        colors: [Colors.teal, Colors.greenAccent],
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
+    return Stack(
+      children: [
+        Positioned.fill(
+        child: Image.asset(
+          'assets/images/etc/bmipage.jpg',
+          fit: BoxFit.cover,
+        ),
       ),
-    ),
-  ),
-  title: const Text(
-    'คำนวณค่าดัชนีมวลกาย (BMI)',
-    style: TextStyle(fontWeight: FontWeight.bold),
-  ),
-  centerTitle: true,
-),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              spacing: 20,
-              children: [
-                description(),
-                form(),
-                showResultBox ? resultBox() : SizedBox(),
-              ],
+        Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            elevation: 0,
+            flexibleSpace: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.teal, Colors.greenAccent],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
+            ),
+            title: const Text(
+              'คำนวณค่าดัชนีมวลกาย (BMI)',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            centerTitle: true,
+          ),
+          body: SingleChildScrollView(
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  spacing: 20,
+                  children: [
+                    description(),
+                    form(),
+                    showResultBox ? resultBox() : SizedBox(),
+                  ],
+                ),
+              ),
             ),
           ),
         ),
-      ),
+      ],
     );
   }
 
   Widget description() {
     return Card(
       child: Container(
+        alignment: Alignment.centerLeft,
         padding: EdgeInsets.all(20),
         width: 600,
         child: Text("""
@@ -79,11 +91,20 @@ class _BMIPageState extends State<BMIPage> {
     return Form(
       key: _formKey,
       child: Column(
+        spacing: 20,
         children: [
           SizedBox(
             width: 300,
             child: TextFormField(
-              decoration: InputDecoration(labelText: "น้ำหนัก(กิโลกรัม)"),
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black),
+                ),
+                labelText: "น้ำหนัก(กิโลกรัม)",
+              ),
               validator: Validators.multiValidator([
                 Validators.required(errorMessage: "กรุณากรอกข้อมูล"),
                 Validators.numberValidator(errorMessage: "กรุณากรอกตัวเลข"),
@@ -98,7 +119,14 @@ class _BMIPageState extends State<BMIPage> {
             width: 300,
             child: TextFormField(
               keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: "ส่วนสูง(เซนติเมตร)"),
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black),
+                ),
+                labelText: "ส่วนสูง(เซนติเมตร)",
+              ),
               validator: Validators.multiValidator([
                 Validators.required(errorMessage: "กรุณากรอกข้อมูล"),
                 Validators.numberValidator(errorMessage: "กรุณากรอกตัวเลข"),
@@ -109,39 +137,38 @@ class _BMIPageState extends State<BMIPage> {
               },
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: ElevatedButton(
-              onPressed: () async {
-                if (_formKey.currentState!.validate()) {
-                  data.bmi = double.parse(
-                    (data.weight! /
-                            ((data.height! / 100) * (data.height! / 100)))
-                        .toStringAsFixed(2),
-                  );
-                  // await collection.add({
-                  //   'name': name,
-                  //   'data': {
-                  //     'weight': data.weight,
-                  //     'height': data.height,
-                  //     'date': DateTime.now(),
-                  //     'bmi': data.bmi,
-                  //   },
-                  // });
-                  await collection.doc(userid).collection('records').add({
-                    'weight': data.weight,
-                    'height': data.height,
-                    'date': DateTime.now(),
-                    'bmi': data.bmi,
-                  });
-                  setState(() {
-                    showResultBox = true;
-                  });
-                }
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Text("คำนวณและบันทึก"),
+          ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: WidgetStatePropertyAll(Colors.green),
+              shape: WidgetStatePropertyAll(
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              ),
+            ),
+            onPressed: () async {
+              if (_formKey.currentState!.validate()) {
+                data.bmi = double.parse(
+                  (data.weight! / ((data.height! / 100) * (data.height! / 100)))
+                      .toStringAsFixed(2),
+                );
+                await collection.doc(userid).collection('records').add({
+                  'weight': data.weight,
+                  'height': data.height,
+                  'date': DateTime.now(),
+                  'bmi': data.bmi,
+                });
+                setState(() {
+                  showResultBox = true;
+                });
+              }
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 10.0,
+                horizontal: 20,
+              ),
+              child: Text(
+                "คำนวณและบันทึก",
+                style: TextStyle(color: Colors.white),
               ),
             ),
           ),
